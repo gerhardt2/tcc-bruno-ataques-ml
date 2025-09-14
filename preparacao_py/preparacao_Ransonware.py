@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 
 # 1. Ler o dataset
-df = pd.read_csv("datasets/ransomware.csv")
+df = pd.read_csv("../datasets/ransomware.csv")
 
 # 2. Exibir colunas
 print("Colunas disponíveis:", df.columns.tolist())

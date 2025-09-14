@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 
 # Carregar o dataset
-df = pd.read_csv("datasets/DDoS.csv")
+df = pd.read_csv("../datasets/DDoS.csv")
 
 # Visualizar colunas não numéricas
 nao_numericas = df.select_dtypes(include=['object']).columns.tolist()

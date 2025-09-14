@@ -5,13 +5,13 @@ import os
 
 # Mostra o diretório atual e os arquivos na pasta datasets
 print("Diretório atual:", os.getcwd())
-print("Arquivos na pasta datasets:", os.listdir("datasets"))
+print("Arquivos na pasta datasets:", os.listdir("../datasets"))
 
 # Leitura do CSV
 try:
-    df = pd.read_csv("datasets/phishing.csv", encoding="utf-8")
+    df = pd.read_csv("../datasets/phishing.csv", encoding="utf-8")
 except UnicodeDecodeError:
-    df = pd.read_csv("datasets/phishing.csv", encoding="ISO-8859-1")
+    df = pd.read_csv("../datasets/phishing.csv", encoding="ISO-8859-1")
 
 # Mostra as colunas originais
 print("Colunas disponíveis:", df.columns.tolist())
