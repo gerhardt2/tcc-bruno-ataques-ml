@@ -1,3 +1,5 @@
+import random
+
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import StratifiedKFold
@@ -7,6 +9,8 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from sklearn.utils import shuffle
 
+SEEDS = np.arange(1, 20) * 1000
+
 # Função para avaliar modelos com validação cruzada
 def avaliar_modelo(nome_modelo, modelo, X, y):
     print(f'\nModelo: {nome_modelo}')
@@ -14,7 +18,7 @@ def avaliar_modelo(nome_modelo, modelo, X, y):
 
 
 
-    for seed in [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000]:  # Você pode expandir para 30 seeds se quiser mais precisão
+    for seed in SEEDS:  # Você pode expandir para 20 seeds se quiser mais precisão
         skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=seed)
         for train_idx, test_idx in skf.split(X, y):
             X_train, X_test = X[train_idx], X[test_idx]
@@ -23,9 +27,9 @@ def avaliar_modelo(nome_modelo, modelo, X, y):
             y_pred = modelo.predict(X_test)
 
             accs.append(accuracy_score(y_test, y_pred))
-            precs.append(precision_score(y_test, y_pred, average='weighted', zero_division=0))
-            recs.append(recall_score(y_test, y_pred, average='weighted', zero_division=0))
-            f1s.append(f1_score(y_test, y_pred, average='weighted', zero_division=0))
+            precs.append(precision_score(y_test, y_pred, zero_division=0))
+            recs.append(recall_score(y_test, y_pred, zero_division=0))
+            f1s.append(f1_score(y_test, y_pred, zero_division=0))
 
     print(f"Acurácia média: {np.mean(accs):.4f} ± {np.std(accs):.4f}")
     print(f"Precisão média: {np.mean(precs):.4f}")
@@ -59,18 +63,30 @@ def testar_dataset(caminho, nome_dataset):
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
 
-    # Modelos
-    modelos = {
-        'Random Forest': RandomForestClassifier(n_estimators=100, max_depth=10, random_state=42),
-        'SVM': SVC(C=1.0, kernel='rbf', gamma='scale', random_state=42),
-        'Gradient Boosting': GradientBoostingClassifier(n_estimators=100, max_depth=10, random_state=42)
-    }
+    acuracias_random_search = {}
+    for seed in SEEDS:
+        random.seed(seed)
+        espaco_busca_n_estimators = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+        espaco_busca_max_depth = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+        espaco_busca_kernels = ["rbf", "linear"] # ver kerneçls
+        espaco_busca_c = np.arange(0, 1, 0.02)
+
+        for i in range(100):
+            # Modelos
+            #salvar em variaveis a melhor opcao
+            #pega a acuracia e salvar em uma lista
+            modelos = {
+                'Random Forest': RandomForestClassifier(n_estimators=random.choice(espaco_busca_n_estimators), max_depth=espaco_busca_max_depth, random_state=42),
+                'SVM': SVC(C=1.0, kernel='rbf', gamma='scale', random_state=seed),
+                'Gradient Boosting': GradientBoostingClassifier(n_estimators=100, max_depth=10, random_state=seed)
+            }
 
     resultados = []
     for nome_modelo, modelo in modelos.items():
         resultado = avaliar_modelo(nome_modelo, modelo, X_scaled, y.values)
         resultado['dataset'] = nome_dataset
         resultados.append(resultado)
+        acuracias_random_search[(nome_modelo,)] = resultado # colocar depois da , uma forma dele salvar o valor de cada parametro
 
     return resultados
 
