@@ -1,0 +1,5 @@
+{
+  "clf__C": 0.03073746227660439,
+  "clf__gamma": "auto",
+  "clf__kernel": "rbf"
+}
