@@ -1,8 +1,0 @@
-{
-  "clf__learning_rate": 0.0285313843323958,
-  "clf__max_depth": 3,
-  "clf__min_samples_leaf": 3,
-  "clf__min_samples_split": 10,
-  "clf__n_estimators": 139,
-  "clf__subsample": 0.6552526749905278
-}
