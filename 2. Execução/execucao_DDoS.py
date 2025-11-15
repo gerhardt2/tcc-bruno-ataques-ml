@@ -2,10 +2,7 @@
 # # Importações
 #%%
 import random
-## TODO Terminar o DDOS com Validação Cruzada do GBM e SVM - pegar parametros e testar
-## TODO Terminar o DDOS com o holdout do GBM e SVM  - pegar parametros e testar
-## TODO Fazer gráficos de desempenho (holdout e validação cruzada)
-## TODO Faz um notebook igual este para o Phishing e pro Ransomware
+
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
